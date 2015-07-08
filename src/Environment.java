@@ -10,9 +10,7 @@ import java.util.*;
  * Created by Adam Cantor on 7/6/2015.
  * This file is intended to generate/populate a list of agents and parking lots. These lists will be populated
  * according to a given destination in later implemantion. For now we are assuming that there is one destination with
- * four parking lots.
- *
- *
+ * five parking lots.
  *
  */
 public class Environment {
@@ -20,56 +18,78 @@ public class Environment {
     public static double bees = 5;
     public static double lots = 5;
 
+    public static class Bees {
+        int beeID;
+        double startTime;
+        float beeOrigin;
+        float beeLocation;
+        float beeDestination;
+        double parkTime;
+        double exitTime;
+    }
+    public static class Lots {
+        int lotID;
+        int lotSpots;
+        float lotLocation;
+    }
+
     public static void main(String[] args) {
         //create an ArrayList object to hold the Vehicles and the Parking Lots
-        ArrayList beeList = new ArrayList();
-        ArrayList lotList = new ArrayList();
+        ArrayList<Bees> beeList = new ArrayList<Bees>();
+        ArrayList<Lots> lotList = new ArrayList<Lots>();
+
+
 
         for(int index=0; index < bees; index++) {
-            //Add elements to beeList
-            Bottles o = new Bottles();
-            o.setbottleID(bottleIntMap.get("bottleID"+i));
-            o.setname_abbr(bottleNamesMap.get("name"+i));
-            o.setorigin(bottleNamesMap.get("origin"+i));
-            o.setbottlePicture(bottleNamesMap.get("bottlePicture"+i));
-            o.setprice_reported(bottleNamesMap.get("price"+i));
-            o.setdistillery(bottleNamesMap.get("distillery"+i));
-            o.setagg_score(bottleIntMap.get("aggscore"+i));
+            // Generate a random number for simulation
+            Random randGen = new Random();
+            int randInt = randGen.nextInt(100);
+            /*
+            Add elements to place holder array
+
+            NOTE: For this simulation we assume that all agents start at the same
+            point and go to the same destination
+            */
+
+            Bees o = new Bees();
+            o.beeID = index;
+            o.startTime = 100*index;
+            o.beeOrigin = 0;
+            o.beeLocation = 0;
+            o.beeDestination = 100;
+            o.parkTime = o.startTime + randInt;
+            o.exitTime = o.parkTime + randInt;
+
+            //Add place holder array to overall beeList
             beeList.add(index, o);
         }
-    /*
-      To add an element at the specified index of ArrayList use
-      void add(int index, Object obj) method.
-      This method inserts the specified element at the specified index in the
-      ArrayList.
 
-      Please note that add method DOES NOT overwrites the element previously
-      at the specified index in the list. It shifts the elements to right side
-      and increasing the list size by 1.
-    */
         for(int index=0; index < lots; index++) {
-            //Add elements to lotList
-            lotList.add(index, new ArrayList());
+            // Generate a random number for simulation
+            Random randGen = new Random();
+            int randInt = randGen.nextInt(100);
+            /*
+            Add elements to place holder array
+            */
+
+            Lots p = new Lots();
+            p.lotID = index;
+            p.lotSpots = 100*index;
+            p.lotLocation = 100*index/5;
+
+            //Add place holder array to overall beeList
+            lotList.add(index, p);
         }
 
         System.out.println("beeList contains...");
         //display elements of BeeList
         for(int index=0; index < beeList.size(); index++) {
-            System.out.println(beeList.get(index));
+            System.out.println(beeList.get(index).beeID);
         }
         System.out.println("lotList contains...");
         //display elements of BeeList
         for(int index=0; index < lotList.size(); index++) {
-            System.out.println(lotList.get(index));
+            System.out.println(lotList.get(index).lotID);
         }
     }
 }
-
-/*
-Output would be
-ArrayList contains...
-1
-INSERTED ELEMENT
-2
-3
-*/
