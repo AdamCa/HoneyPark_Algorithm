@@ -25,36 +25,19 @@ public class Environment {
         double lots = 3;
 
         for(int index=0; index < bees; index++) {
-            // Generate a random number for simulation
-            Random randGen = new Random();
-            int randInt = randGen.nextInt(100);
-            /*
-            Add elements to place holder array
 
-            NOTE: For this simulation we assume that all agents start at the same
-            point and go to the same destination
-            */
+            //Generate individual bee agents and add them to place holder array
 
-            Bees o = new Bees();
-            o.beeID = index;
-            o.startTime = 100*index;
-            o.beeOrigin = 0;
-            o.beeLocation = 0;
-            o.beeDestination = 100;
-            o.parkTime = o.startTime + randInt;
-            o.exitTime = o.parkTime + randInt;
+
+            Bees CBee = new Bees();
+            CBee.beeID = index;
 
             //Add place holder array to overall beeList
-            beeList.add(index, o);
+            beeList.add(index, CBee);
         }
 
         for(int index=0; index < lots; index++) {
-            // Generate a random number for simulation
-            Random randGen = new Random();
-            int randInt = randGen.nextInt(100);
-            /*
-            Add elements to place holder array
-            */
+            //Add elements to place holder array
 
             Lots p = new Lots();
             p.lotID = index;
