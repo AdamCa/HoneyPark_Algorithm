@@ -14,31 +14,15 @@ import java.util.*;
  *
  */
 public class Environment {
-
-    public static double bees = 5;
-    public static double lots = 5;
-
-    public static class Bees {
-        int beeID;
-        double startTime;
-        float beeOrigin;
-        float beeLocation;
-        float beeDestination;
-        double parkTime;
-        double exitTime;
-    }
-    public static class Lots {
-        int lotID;
-        int lotSpots;
-        float lotLocation;
-    }
-
     public static void main(String[] args) {
+
         //create an ArrayList object to hold the Vehicles and the Parking Lots
         ArrayList<Bees> beeList = new ArrayList<Bees>();
         ArrayList<Lots> lotList = new ArrayList<Lots>();
 
-
+        //Choose the size of simulation environment
+        double bees = 5;
+        double lots = 3;
 
         for(int index=0; index < bees; index++) {
             // Generate a random number for simulation
@@ -81,15 +65,24 @@ public class Environment {
             lotList.add(index, p);
         }
 
+        System.out.println("lotList contains...");
+        //display elements of lotList
+        for(int index=0; index < lotList.size(); index++) {
+            System.out.print("Lot# " + lotList.get(index).lotID);
+            System.out.print(", Spots " + lotList.get(index).lotSpots);
+            System.out.println(", Location " + lotList.get(index).lotLocation);
+        }
+
         System.out.println("beeList contains...");
         //display elements of BeeList
         for(int index=0; index < beeList.size(); index++) {
-            System.out.println(beeList.get(index).beeID);
-        }
-        System.out.println("lotList contains...");
-        //display elements of BeeList
-        for(int index=0; index < lotList.size(); index++) {
-            System.out.println(lotList.get(index).lotID);
+            System.out.print("Agent# " + beeList.get(index).beeID);
+            System.out.print(", Origin " + beeList.get(index).startTime);
+            System.out.print(", Start " + beeList.get(index).beeOrigin);
+            System.out.print(", Current " + beeList.get(index).beeLocation);
+            System.out.print(", Destination " + beeList.get(index).beeDestination);
+            System.out.print(", Parked " + beeList.get(index).parkTime);
+            System.out.println(", Exit " + beeList.get(index).exitTime);
         }
     }
 }
