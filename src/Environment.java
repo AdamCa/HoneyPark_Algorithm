@@ -25,26 +25,17 @@ public class Environment {
         double lots = 3;
 
         for(int index=0; index < bees; index++) {
-
             //Generate individual bee agents and add them to place holder array
-
-
-            Bees CBee = new Bees();
-            CBee.beeID = index;
+            Bees holdBee = new Bees(index);
 
             //Add place holder array to overall beeList
-            beeList.add(index, CBee);
+            beeList.add(index, holdBee);
         }
-
         for(int index=0; index < lots; index++) {
-            //Add elements to place holder array
+            //Generate individual lots and add them to place holder array
+            Lots p = new Lots(index);
 
-            Lots p = new Lots();
-            p.lotID = index;
-            p.lotSpots = 100*index;
-            p.lotLocation = 100*index/5;
-
-            //Add place holder array to overall beeList
+            //Add place holder array to overall lotList
             lotList.add(index, p);
         }
 
@@ -60,8 +51,8 @@ public class Environment {
         //display elements of BeeList
         for(int index=0; index < beeList.size(); index++) {
             System.out.print("Agent# " + beeList.get(index).beeID);
-            System.out.print(", Origin " + beeList.get(index).startTime);
-            System.out.print(", Start " + beeList.get(index).beeOrigin);
+            System.out.print(", Start " + beeList.get(index).startTime);
+            System.out.print(", Origin " + beeList.get(index).beeOrigin);
             System.out.print(", Current " + beeList.get(index).beeLocation);
             System.out.print(", Destination " + beeList.get(index).beeDestination);
             System.out.print(", Parked " + beeList.get(index).parkTime);

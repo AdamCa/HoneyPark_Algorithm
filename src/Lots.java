@@ -1,3 +1,5 @@
+import java.util.*;
+
 /**
  * Created by Adam Cantor on 7/13/2015.
  *
@@ -5,7 +7,31 @@
  */
 public class Lots {
 
-    int lotID;
-    int lotSpots;
-    float lotLocation;
+    public int lotID;
+    public int lotSpots;
+    public float lotLocation;
+
+    public Lots(int ID) {
+
+        /*
+        NOTE: For this simulation we make the following assumptions:
+        1) All parking lots have known parameters(to us, but not to the swarm)
+        2) Parameters of Interest - # of Spots, Location
+        4) All parking events occur between 12 am and 12 pm (0 - 1440 minutes)
+        */
+
+        // Generate a random gaussian number for general simulation randomization
+        Random randGen = new Random(ID);
+
+        double gausNum = randGen.nextGaussian();
+        int intNum = randGen.nextInt(100);
+        double doubNum = randGen.nextDouble();
+
+        int lotAddress = intNum+100;
+        int lotSpot = randGen.nextInt(200);
+
+        this.lotID = ID;
+        this.lotLocation = lotAddress;
+        this.lotSpots = lotSpot;
+    }
 }
