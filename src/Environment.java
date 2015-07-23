@@ -16,7 +16,10 @@ import java.util.*;
 public class Environment {
     public static void main(String[] args) {
 
-        //create an ArrayList object to hold the Vehicles and the Parking Lots
+        //Create a variable to hold the time
+        int time = 0;
+
+        //Create an ArrayList object to hold the Vehicles and the Parking Lots
         ArrayList<Bees> beeList = new ArrayList<Bees>();
         ArrayList<Lots> lotList = new ArrayList<Lots>();
 
@@ -27,23 +30,23 @@ public class Environment {
         for(int index=0; index < bees; index++) {
             //Generate individual bee agents and add them to place holder array
             Bees holdBee = new Bees(index);
-
             //Add place holder array to overall beeList
             beeList.add(index, holdBee);
         }
         for(int index=0; index < lots; index++) {
             //Generate individual lots and add them to place holder array
             Lots p = new Lots(index);
-
             //Add place holder array to overall lotList
             lotList.add(index, p);
         }
 
+        // Display the current state of the environment
         System.out.println("lotList contains...");
         //display elements of lotList
         for(int index=0; index < lotList.size(); index++) {
             System.out.print("Lot# " + lotList.get(index).lotID);
-            System.out.print(", Spots " + lotList.get(index).lotSpots);
+            System.out.print(", Total Spots " + lotList.get(index).lotSpots);
+            System.out.print(", Empty Spots " + lotList.get(index).lotEmpty);
             System.out.println(", Location " + lotList.get(index).lotLocation);
         }
 
@@ -57,6 +60,23 @@ public class Environment {
             System.out.print(", Destination " + beeList.get(index).beeDestination);
             System.out.print(", Parked " + beeList.get(index).parkTime);
             System.out.println(", Exit " + beeList.get(index).exitTime);
+        }
+
+        /** Move the simulation forward in time by 1 time step until an action is triggered:
+         * Agent reaches the destination
+         * Agent reaches a spot
+         * Agent leaves a spot
+         *
+         * At each time step allow the number of empty spots in each lot to change randomly
+        */
+
+        // Increment the overall time variable
+        time++;
+        for (int index=0; index < beeList.size(); index++) {
+            // Generate a random number to decide how far each vehicle moves
+            Random randGen = new Random(index);
+
+
         }
     }
 }

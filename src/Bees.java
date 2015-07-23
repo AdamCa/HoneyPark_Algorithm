@@ -33,19 +33,22 @@ public class Bees {
 
         int randStart = randGen.nextInt(1440);
 
-        // Generate a random number for travel time on a gaussian distribution with a minimum
+        // Generate a random number for travel time and park time on a gaussian distribution with a minimum
         double tripGaus;
+        double stayGaus;
         do {
-            double rawTripGaus = randGen.nextGaussian() * 100 + 100;
+            double rawTripGaus = randGen.nextGaussian();
+            double rawStayGaus = randGen.nextGaussian();
             tripGaus = (int) Math.round(rawTripGaus);
-        } while (tripGaus <= 50);
+            stayGaus = (int) Math.round(rawStayGaus);
+        } while ((tripGaus < .8) && (tripGaus > 2) && (stayGaus < .5) && (stayGaus > 3));
 
         this.beeID = ID;
         this.startTime = randStart;
         this.beeOrigin = 0;
         this.beeLocation = 0;
         this.beeDestination = 100;
-        this.parkTime = this.startTime + (this.beeLocation - this.beeDestination) * tripGaus;
-        this.exitTime = this.parkTime + 60 * tripGaus / 100;
+        this.parkTime = this.startTime + (this.beeDestination-this.beeLocation);
+        this.exitTime = this.parkTime + 20 * stayGaus;
     }
 }
