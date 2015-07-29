@@ -10,7 +10,7 @@ public class Bees {
     public int beeID;
     public double startTime;
     public float beeOrigin;
-    public float beeLocation;
+    public double beeLocation;
     public float beeDestination;
     public double parkTime;
     public double exitTime;
@@ -48,7 +48,7 @@ public class Bees {
         this.beeOrigin = 0;
         this.beeLocation = 0;
         this.beeDestination = 100;
-        this.parkTime = this.startTime + (this.beeDestination-this.beeLocation);
-        this.exitTime = this.parkTime + 20 * stayGaus;
+        this.parkTime = 0; //this.startTime + (this.beeDestination-this.beeLocation);
+        this.exitTime = 0; //this.parkTime + 20 * stayGaus;
     }
 }

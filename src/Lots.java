@@ -9,8 +9,9 @@ public class Lots {
 
     public int lotID;
     public int lotSpots;
-    public double lotEmpty;
+    public int lotEmpty;
     public float lotLocation;
+    public float lotQuality;
 
     public Lots(int ID) {
 
@@ -35,5 +36,6 @@ public class Lots {
         this.lotLocation = lotAddress;
         this.lotSpots = lotSpot;
         this.lotEmpty = randGen.nextInt(lotSpot);
+        this.lotQuality = 1;
     }
 }
