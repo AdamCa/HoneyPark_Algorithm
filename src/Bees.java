@@ -12,6 +12,7 @@ public class Bees {
     public float beeOrigin;
     public double beeLocation;
     public float beeDestination;
+    public double needTime;
     public double parkTime;
     public double exitTime;
 
@@ -36,18 +37,22 @@ public class Bees {
         // Generate a random number for travel time and park time on a gaussian distribution with a minimum
         double tripGaus;
         double stayGaus;
+        double needGaus;
         do {
             double rawTripGaus = randGen.nextGaussian();
             double rawStayGaus = randGen.nextGaussian();
+            double rawNeedGaus = randGen.nextGaussian();
             tripGaus = (int) Math.round(rawTripGaus);
             stayGaus = (int) Math.round(rawStayGaus);
-        } while ((tripGaus < .8) && (tripGaus > 2) && (stayGaus < .5) && (stayGaus > 3));
+            needGaus = rawNeedGaus*10 + 30;
+        } while ((tripGaus < .8) && (tripGaus > 2) && (stayGaus < .5) && (stayGaus > 3) && (needGaus > 5) && (needGaus <= 60));
 
         this.beeID = ID;
         this.startTime = randStart;
         this.beeOrigin = 0;
         this.beeLocation = 0;
         this.beeDestination = 100;
+        this.needTime = needGaus;
         this.parkTime = 0; //this.startTime + (this.beeDestination-this.beeLocation);
         this.exitTime = 0; //this.parkTime + 20 * stayGaus;
     }

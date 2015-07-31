@@ -24,8 +24,8 @@ public class Environment {
         ArrayList<Lots> lotList = new ArrayList<Lots>();
 
         //Choose the size of simulation environment
-        int bees = 5;
-        int lots = 3;
+        int bees = 10;
+        int lots = 4;
 
         for(int index=0; index < bees; index++) {
             //Generate individual bee agents and add them to place holder array
@@ -75,10 +75,11 @@ public class Environment {
          * At each time step allow the number of empty spots in each lot to change randomly
          */
 
-        do {
+        while (time < 1440) {
             // Increment the overall time variable until all agents have parked and exited
             time++;
 
+            /*
             // Randomly change number of free spots to account for free agents. Use +/-10% of total spots
             for (int index = 0; index < lotList.size(); index++) {
                 // Generate a random number to change available lot spots
@@ -87,21 +88,22 @@ public class Environment {
                 intNum = randGen.nextInt(Math.round((float) lotList.get(index).lotSpots / 5)) - Math.round((float) lotList.get(index).lotSpots / 10);
                 lotList.get(index).lotEmpty = +intNum;
             }
+            */
 
             // Move all agents forward by one time step if the agent has started and not parked
             for (int index = 0; index < beeList.size(); index++) {
                 // Check to make sure that the agent is active in this time window
-                if ((beeList.get(index).startTime >= time) && (beeList.get(index).parkTime == 0)) {
+                if ((beeList.get(index).startTime <= time) && (beeList.get(index).parkTime <= 0)) {
                     // Generate a random number to decide how far each vehicle moves per time step
                     Random randGen = new Random(index);
-                    double gausNum;
-                    int randLot;
+                    double gausNum = 0;
+                    int randLot = 0;
                     do {
                         gausNum = randGen.nextGaussian() + 1;
                     } while ((gausNum < 0) && (gausNum > 1.8));
 
                     // Move agent towards destination
-                    beeList.get(index).beeLocation = +gausNum;
+                    beeList.get(index).beeLocation = beeList.get(index).beeLocation + gausNum;
 
                     // If an agent reaches their destination,
                     if (beeList.get(index).beeLocation >= beeList.get(index).beeDestination) {
@@ -125,8 +127,15 @@ public class Environment {
                         }
                     }
                 }
+                if ((beeList.get(index).parkTime > 0) && ((time - beeList.get(index).parkTime) < beeList.get(index).needTime)) {
+                    beeList.get(index).exitTime = time;
+                }
+
+                /* At the end of each time, update the number of spots available in each parking lot with agents, and
+                 turn away any new agents if the lot is full.
+                */
             }
-        } while (time < 1440);
+        }
 
         // Display the final state of the environment
         System.out.println("lotList contains...");
