@@ -146,9 +146,13 @@ public class Environment {
                         }
                     }
                 }
-
+                
+                // Check if a parked agent has finished their errand and then removes them from the environment
                 if ((beeList.get(index).parkTime > 0) && ((time - beeList.get(index).parkTime) < beeList.get(index).needTime)) {
+                    // Record the time that the agent leaves the lot and effectively leaves the environment
                     beeList.get(index).exitTime = time;
+                    // Add the empty spot back into the parking lot
+                    ++lotList.get(beeList.get(index).beeLot).lotEmpty;
                 }
 
                 /* At the end of each time, update the number of spots available in each parking lot with agents, and
@@ -186,6 +190,6 @@ public class Environment {
         System.out.println("Time " + time);
 
         // Calculate the overall metrics
-        
+
     }
 }
