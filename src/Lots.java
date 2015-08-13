@@ -30,7 +30,7 @@ public class Lots {
         double doubNum = randGen.nextDouble();
 
         int lotAddress = intNum+100;
-        int lotSpot = randGen.nextInt(200);
+        int lotSpot = randGen.nextInt(192)+8;
 
         this.lotID = ID;
         this.lotLocation = lotAddress;

@@ -41,7 +41,7 @@ public class Environment {
         }
 
         // Display the current state of the environment
-        System.out.println("lotList contains...");
+        System.out.println("lotList initialized...");
         //display elements of lotList
         for(int index=0; index < lotList.size(); index++) {
             System.out.print("Lot# " + lotList.get(index).lotID);
@@ -50,14 +50,15 @@ public class Environment {
             System.out.print(", Location " + lotList.get(index).lotLocation);
             System.out.println(", Quality " + lotList.get(index).lotQuality);
         }
-
-        System.out.println("beeList contains...");
+/*
+        System.out.println("beeList initialized...");
         //display elements of BeeList
         for(int index=0; index < beeList.size(); index++) {
             System.out.print("Agent# " + beeList.get(index).beeID);
             System.out.print(", Start " + beeList.get(index).startTime);
             System.out.print(", Origin " + beeList.get(index).beeOrigin);
             System.out.print(", Current " + beeList.get(index).beeLocation);
+            System.out.print(", Chosen Lot " + beeList.get(index).beeLot);
             System.out.print(", Destination " + beeList.get(index).beeDestination);
             System.out.print(", Parked " + beeList.get(index).parkTime);
             System.out.println(", Exit " + beeList.get(index).exitTime);
@@ -65,7 +66,7 @@ public class Environment {
 
         // display simulation start time
         System.out.println("Time " + time);
-
+*/
         /** Move the simulation forward in time by 1 time step until an action is triggered:
          * Agent reaches the destination
          * Agent Chooses a Parking Lot
@@ -79,16 +80,19 @@ public class Environment {
             // Increment the overall time variable until all agents have parked and exited
             time++;
 
-            /*
-            // Randomly change number of free spots to account for free agents. Use +/-10% of total spots
+
+            // Randomly change number of free spots to account for free agents. Use +/-5% of total spots
             for (int index = 0; index < lotList.size(); index++) {
-                // Generate a random number to change available lot spots
+                // Generate a random number to change available lot spots without overfilling or over emptying each lot
                 Random randGen = new Random(index);
                 int intNum;
-                intNum = randGen.nextInt(Math.round((float) lotList.get(index).lotSpots / 5)) - Math.round((float) lotList.get(index).lotSpots / 10);
-                lotList.get(index).lotEmpty = +intNum;
+                do {
+                    intNum = randGen.nextInt(Math.round(lotList.get(index).lotSpots / 30)) - randGen.nextInt(Math.round(lotList.get(index).lotSpots / 15));
+                } while (((lotList.get(index).lotEmpty + intNum) < 0)||((lotList.get(index).lotEmpty) + intNum > lotList.get(index).lotSpots));
+                // add the random pos or neg number to the number of empty spots
+                lotList.get(index).lotEmpty = lotList.get(index).lotEmpty + intNum;
             }
-            */
+
 
             // Move all agents forward by one time step if the agent has started and not parked
             for (int index = 0; index < beeList.size(); index++) {
@@ -102,31 +106,47 @@ public class Environment {
                         gausNum = randGen.nextGaussian() + 1;
                     } while ((gausNum < 0) && (gausNum > 1.8));
 
-                    // Move agent towards destination
-                    beeList.get(index).beeLocation = beeList.get(index).beeLocation + gausNum;
+                    // Move agent towards destination (increment location if the destination is ahead, decrement if it is behind)
+                    if (beeList.get(index).beeLocation < beeList.get(index).beeDestination) {
+                        beeList.get(index).beeLocation = beeList.get(index).beeLocation + gausNum;
+                    }
+                    else {
+                        beeList.get(index).beeLocation = beeList.get(index).beeLocation - gausNum;
+                    }
 
-                    // If an agent reaches their destination,
-                    if (beeList.get(index).beeLocation >= beeList.get(index).beeDestination) {
-                        // Check park indicator value of -1
-                        if (beeList.get(index).parkTime == -1) {
+                    // If an agent reaches their destination (gets within 2 units)
+                    if (Math.abs(beeList.get(index).beeLocation - beeList.get(index).beeDestination) < 2) {
+                        // Check park indicator value of -1 and if the chosen lot has an empty spot
+                        if ((beeList.get(index).parkTime == -1) && (lotList.get(beeList.get(index).beeLot).lotEmpty > 0)) {
+                            // Subtract a spot from the emptySpots
+                            --lotList.get(beeList.get(index).beeLot).lotEmpty;
+
                             // Record the time that the agent parked
                             beeList.get(index).parkTime = time;
-                        } else {
-                            // Choose next lot Randomly (Random Search)
-                            randLot = randGen.nextInt(lots);
-                            beeList.get(index).beeDestination = lotList.get(randLot).lotLocation;
+                        }
+                        else {
+                                    // Choose next lot Randomly (Random Search)
+                                    do {
+                                        randLot = randGen.nextInt(lots);
+                                    } while(randLot == beeList.get(index).beeLot);
+                                    // Save the chosen lot and the lot location
+                                    beeList.get(index).beeLot = randLot;
+                                    beeList.get(index).beeDestination = lotList.get(randLot).lotLocation;
 
-                            // Choose closest lot to Destination (Greedy Search)
+                                    // Choose closest lot to Destination (Greedy Search)
 
 
-                            // Choose lot with highest quality given current location (HoneyPark)
+                                    // Choose lot with highest quality given current location (HoneyPark)
 
 
-                            // Set indicator value for parkTime to show that the agent is hunting
-                            beeList.get(index).parkTime = -1;
+                                    // Set indicator value for parkTime to show that the agent is hunting
+                                    beeList.get(index).parkTime = -1;
+                                    // Save the time for the start of the parking search
+                                    beeList.get(index).parkStart = time;
                         }
                     }
                 }
+
                 if ((beeList.get(index).parkTime > 0) && ((time - beeList.get(index).parkTime) < beeList.get(index).needTime)) {
                     beeList.get(index).exitTime = time;
                 }
@@ -138,7 +158,7 @@ public class Environment {
         }
 
         // Display the final state of the environment
-        System.out.println("lotList contains...");
+        System.out.println("lotList terminates...");
         //display elements of lotList
         for(int index=0; index < lotList.size(); index++) {
             System.out.print("Lot# " + lotList.get(index).lotID);
@@ -148,19 +168,24 @@ public class Environment {
             System.out.println(", Quality " + lotList.get(index).lotQuality);
         }
 
-        System.out.println("beeList contains...");
+        System.out.println("beeList terminates...");
         //display elements of BeeList
         for(int index=0; index < beeList.size(); index++) {
             System.out.print("Agent# " + beeList.get(index).beeID);
-            System.out.print(", Start " + beeList.get(index).startTime);
             System.out.print(", Origin " + beeList.get(index).beeOrigin);
-            System.out.print(", Current " + beeList.get(index).beeLocation);
+            System.out.print(", Current " + Math.round(beeList.get(index).beeLocation));
+            System.out.print(", Chosen Lot " + beeList.get(index).beeLot);
             System.out.print(", Destination " + beeList.get(index).beeDestination);
+            System.out.print(", Start " + beeList.get(index).startTime);
+            System.out.print(", startPark " + beeList.get(index).parkStart);
             System.out.print(", Parked " + beeList.get(index).parkTime);
             System.out.println(", Exit " + beeList.get(index).exitTime);
         }
 
         // display simulation end time
         System.out.println("Time " + time);
+
+        // Calculate the overall metrics
+        
     }
 }
