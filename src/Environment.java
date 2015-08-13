@@ -98,12 +98,12 @@ public class Environment {
             for (int index = 0; index < beeList.size(); index++) {
                 // Check to make sure that the agent is active in this time window
                 if ((beeList.get(index).startTime <= time) && (beeList.get(index).parkTime <= 0)) {
-                    // Generate a random number to decide how far each vehicle moves per time step
+                    // Generate a random Gaussian number to decide how far each vehicle moves per time step
                     Random randGen = new Random(index);
                     double gausNum = 0;
                     int randLot = 0;
                     do {
-                        gausNum = randGen.nextGaussian() + 1;
+                        gausNum = randGen.nextGaussian()/2 + 1;
                     } while ((gausNum < 0) && (gausNum > 1.8));
 
                     // Move agent towards destination (increment location if the destination is ahead, decrement if it is behind)
@@ -146,7 +146,7 @@ public class Environment {
                         }
                     }
                 }
-                
+
                 // Check if a parked agent has finished their errand and then removes them from the environment
                 if ((beeList.get(index).parkTime > 0) && ((time - beeList.get(index).parkTime) < beeList.get(index).needTime)) {
                     // Record the time that the agent leaves the lot and effectively leaves the environment
