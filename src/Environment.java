@@ -24,8 +24,8 @@ public class Environment {
         ArrayList<Lots> lotList = new ArrayList<Lots>();
 
         //Choose the size of simulation environment
-        int bees = 10;
-        int lots = 4;
+        int bees = 100;
+        int lots = 5;
 
         for(int index=0; index < bees; index++) {
             //Generate individual bee agents and add them to place holder array
@@ -160,7 +160,7 @@ public class Environment {
                 */
             }
         }
-
+/*
         // Display the final state of the environment
         System.out.println("lotList terminates...");
         //display elements of lotList
@@ -188,8 +188,23 @@ public class Environment {
 
         // display simulation end time
         System.out.println("Time " + time);
+*/
+        /* Calculate the overall metrics
+        - Total Number of Agents
+        - Total Time spent by all agents driving, parking, and overall
+        */
 
-        // Calculate the overall metrics
-
+        // Initialize variables
+        double totalTime = 0;
+        double parkTime = 0;
+        // Sum all of the overall metrics by looking at each agent
+        for(int index=0; index < beeList.size(); index++) {
+            totalTime = totalTime + (beeList.get(index).exitTime - beeList.get(index).startTime);
+            parkTime = parkTime + (beeList.get(index).parkTime - beeList.get(index).parkStart);
+        }
+        System.out.print("# of Lots =" + lots);
+        System.out.print(", # of Agents =" + bees);
+        System.out.print(", Total Time Spent = " + totalTime);
+        System.out.println(", Total Spent Parking = " + parkTime);
     }
 }
