@@ -15,7 +15,7 @@ public class Bees {
     public int parkStart;
     public int beeLot;
     public double needTime;
-    public double parkTime;
+    public double huntTime;
     public double exitTime;
 
     public Bees(int ID) {
@@ -57,7 +57,7 @@ public class Bees {
         this.parkStart = -1;
         this.beeLot = -1;
         this.needTime = needGaus;
-        this.parkTime = 0; //this.startTime + (this.beeDestination-this.beeLocation);
-        this.exitTime = 0; //this.parkTime + 20 * stayGaus;
+        this.huntTime = 0;
+        this.exitTime = 0;
     }
 }
