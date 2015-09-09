@@ -24,9 +24,7 @@ public class Environment {
         ArrayList<Lots> lotList = new ArrayList<Lots>();
 
         //Choose the size of simulation environment
-        int bees = 10
-
-        00;
+        int bees = 100;
         int lots = 5;
 
         for(int index=0; index < bees; index++) {
