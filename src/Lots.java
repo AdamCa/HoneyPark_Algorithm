@@ -10,7 +10,7 @@ public class Lots {
     public int lotID;
     public int lotSpots;
     public int lotEmpty;
-    public float lotLocation;
+    public double lotLocation;
     public float lotQuality;
 
     public Lots(int ID) {

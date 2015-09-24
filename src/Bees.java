@@ -11,7 +11,7 @@ public class Bees {
     public double startTime;
     public float beeOrigin;
     public double beeLocation;
-    public float beeDestination;
+    public double beeDestination;
     public int parkStart;
     public int beeLot;
     public double needTime;
@@ -46,8 +46,8 @@ public class Bees {
             double rawNeedGaus = randGen.nextGaussian();
             tripGaus = (int) Math.round(rawTripGaus);
             stayGaus = (int) Math.round(rawStayGaus);
-            needGaus = rawNeedGaus*10 + 30;
-        } while ((tripGaus < .8) && (tripGaus > 2) && (stayGaus < .5) && (stayGaus > 3) && (needGaus > 5) && (needGaus <= 60));
+            needGaus = rawNeedGaus*30 + 30;
+        } while ((tripGaus < .8) && (tripGaus > 2) && (stayGaus < .5) && (stayGaus > 3) && (needGaus > 5));
 
         this.beeID = ID;
         this.startTime = randStart;

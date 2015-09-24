@@ -15,17 +15,20 @@ import java.util.*;
  */
 public class Environment {
     public static void main(String[] args) {
-
+        //INITIALIZATION PARAMETERS
         //Create a variable to hold the time
         int time = 0;
+
+        //Choose the size of simulation environment
+        int bees = 15000;
+        int lots = 5;
+
+        //Select the agent algorithm: 1 is Random, 2 is Greedy, 3 is HoneyPark MK1
+        int algo = 1;
 
         //Create an ArrayList object to hold the Vehicles and the Parking Lots
         ArrayList<Bees> beeList = new ArrayList<Bees>();
         ArrayList<Lots> lotList = new ArrayList<Lots>();
-
-        //Choose the size of simulation environment
-        int bees = 100;
-        int lots = 5;
 
         for(int index=0; index < bees; index++) {
             //Generate individual bee agents and add them to place holder array
@@ -134,39 +137,78 @@ public class Environment {
                             // Record the time that the agent parked
                             beeList.get(index).huntTime = time;
 
-                        }
-                        else {
+                        } // Next we select a parking lot destination if the bee isn't looking yet or the current lot is full
+                        else if ((beeList.get(index).huntTime == 0) || (lotList.get(beeList.get(index).beeLot).lotEmpty == 0)) {
                             // This is the section where we select a parking lot and begin the hunt according to our algorithms
 
-
                             // Choose next lot Randomly with an Even Distribution (Random Search)
-                            randLot = randGen.nextInt(lots);
+                            if (algo == 1) {
+                                randLot = randGen.nextInt(lots);
+                                // Save the chosen lot and set the lot location as the destination
+                                beeList.get(index).beeLot = randLot;
+                                beeList.get(index).beeDestination = lotList.get(randLot).lotLocation;
+                            }
 
-                            // Choose closest lot to Destination (Greedy Search)
 
+                            // Choose closest lot to current Bee Destination (Greedy Search)
+                            if (algo == 2) {
+                                // Find the closest lot to the current Bee destination by distance in an outward direction
+                                // calcDist - calculation variable to compare lot to bee distances
+                                double calcDist;
+                                // prev_calcDist - holds previous closest bee destination for continued comparisons
+                                double prev_calcDist = 1000;
+
+                                // Check all possible lots to see which one is the next closest
+                                for (int closedex = 0; closedex < lotList.size(); closedex++) {
+                                    calcDist = lotList.get(closedex).lotLocation - beeList.get(index).beeLocation;
+
+                                    // looks for the closest lot starting from the destination and moving outward.
+                                    if ((0 < calcDist) && (calcDist < prev_calcDist)) {
+
+                                        // Save the chosen lot and set the lot location as the destination
+                                        beeList.get(index).beeLot = closedex;
+                                        beeList.get(index).beeDestination = lotList.get(closedex).lotLocation;
+
+                                        // update prev_calcDist
+                                        prev_calcDist = calcDist;
+                                    }
+                                }
+
+                                // If all lots have been attempted go back to the first lot attempt and re-search
+                                if (prev_calcDist == 1000) {
+                                    // Check for the closest lot in the reverse direction
+                                    for (int closedex = lotList.size(); closedex < lotList.size(); closedex--) {
+                                        calcDist = lotList.get(closedex).lotLocation - beeList.get(index).beeOrigin;
+
+                                        // looks for the closest lot starting from the destination and moving outward.
+                                        if ((0 < calcDist) && (calcDist < prev_calcDist)) {
+
+                                            // Save the chosen lot and set the lot location as the destination
+                                            beeList.get(index).beeLot = closedex;
+                                            beeList.get(index).beeDestination = lotList.get(closedex).lotLocation;
+                                        }
+                                    }
+                                }
+                            }
 
                             // Choose lot with highest quality given current location (HoneyPark)
+                            if (algo == 3) {
 
+                            }
 
-
-                            // Initiate the search for parking by setting huntTime to the indicator value of -1
+                                // Initiate the search for parking by setting huntTime to the indicator value of -1
                             if (beeList.get(index).huntTime == 0) {
                                 // Set indicator value for huntTime to show that the agent is hunting
                                 beeList.get(index).huntTime = -1;
                                 // Save the time for the start of the parking search
                                 beeList.get(index).parkStart = time;
                             }
-
-                            // Save the chosen lot and set the lot location as the destination
-                            beeList.get(index).beeLot = randLot;
-                            beeList.get(index).beeDestination = lotList.get(randLot).lotLocation;
-
                         }
                     }
                 }
 
                 // Check if a parked agent has finished their errand and then removes them from the environment
-                if ((beeList.get(index).huntTime > 0) && ((time - beeList.get(index).huntTime) < beeList.get(index).needTime)) {
+                if ((beeList.get(index).huntTime > 0) && ((time - beeList.get(index).huntTime) >= beeList.get(index).needTime) && (beeList.get(index).exitTime == 0)) {
                     // Record the time that the agent leaves the lot and effectively leaves the environment
                     beeList.get(index).exitTime = time;
                     // Add the empty spot back into the parking lot
