@@ -26,6 +26,9 @@ public class Environment {
         //Select the agent algorithm: 1 is Random, 2 is Greedy, 3 is HoneyPark MK1
         int algo = 1;
 
+        // Keep track of total parking events
+        int parkingEvents = 0;
+
         //Create an ArrayList object to hold the Vehicles and the Parking Lots
         ArrayList<Bees> beeList = new ArrayList<Bees>();
         ArrayList<Lots> lotList = new ArrayList<Lots>();
@@ -213,6 +216,7 @@ public class Environment {
                     beeList.get(index).exitTime = time;
                     // Add the empty spot back into the parking lot
                     ++lotList.get(beeList.get(index).beeLot).lotEmpty;
+                    ++parkingEvents;
                 }
 
             }
@@ -269,6 +273,7 @@ public class Environment {
         System.out.print(", # of Agents =" + bees);
         System.out.print(", Total Time Spent = " + totalTime);
         System.out.print(", Total Spent Parking = " + huntTime);
+        System.out.print(", Total Parking Events = " + parkingEvents);
         System.out.println(", Maximum Hunt Time = " + maxhuntTime);
     }
 }
