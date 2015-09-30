@@ -10,7 +10,8 @@ public class Lots {
     public int lotID;
     public int lotSpots;
     public int lotEmpty;
-    public double lotLocation;
+    public float lotLocX;
+    public float lotLocY;
     public float lotQuality;
 
     public Lots(int ID) {
@@ -24,16 +25,18 @@ public class Lots {
 
         // Generate a random gaussian number for general simulation randomization
         Random randGen = new Random(ID);
-
+/*
         double gausNum = randGen.nextGaussian();
         int intNum = randGen.nextInt(100);
         double doubNum = randGen.nextDouble();
 
         int lotAddress = intNum+100;
+*/
         int lotSpot = randGen.nextInt(192)+8;
 
         this.lotID = ID;
-        this.lotLocation = lotAddress;
+        this.lotLocX = 0;
+        this.lotLocY = 0;
         this.lotSpots = lotSpot;
         this.lotEmpty = randGen.nextInt(lotSpot);
         this.lotQuality = 1;

@@ -9,9 +9,12 @@ public class Bees {
 
     public int beeID;
     public double startTime;
-    public float beeOrigin;
-    public double beeLocation;
-    public double beeDestination;
+    public float beeOriginX;
+    public float beeOriginY;
+    public float beeLocX;
+    public float beeLocY;
+    public float beeDestX;
+    public float beeDestY;
     public int parkStart;
     public int beeLot;
     public double needTime;
@@ -51,9 +54,12 @@ public class Bees {
 
         this.beeID = ID;
         this.startTime = randStart;
-        this.beeOrigin = 0;
-        this.beeLocation = 0;
-        this.beeDestination = 100;
+        this.beeOriginX = 0;
+        this.beeOriginY = 0;
+        this.beeLocX = 0;
+        this.beeLocY = 0;
+        this.beeDestX = 0;
+        this.beeDestY = 0;
         this.parkStart = -1;
         this.beeLot = -1;
         this.needTime = needGaus;

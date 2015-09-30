@@ -33,6 +33,9 @@ public class Environment {
         for(int index=0; index < bees; index++) {
             //Generate individual bee agents and add them to place holder array
             Bees holdBee = new Bees(index);
+            // Initialize Parameters
+
+
             //Add place holder array to overall beeList
             beeList.add(index, holdBee);
         }
