@@ -30,20 +30,45 @@ public class Environment {
         ArrayList<Bees> beeList = new ArrayList<Bees>();
         ArrayList<Lots> lotList = new ArrayList<Lots>();
 
-        for(int index=0; index < bees; index++) {
-            //Generate individual bee agents and add them to place holder array
-            Bees holdBee = new Bees(index);
-            // Initialize Parameters
-
-
-            //Add place holder array to overall beeList
-            beeList.add(index, holdBee);
-        }
+        // Generate individual lots and add them to a the lotList
         for(int index=0; index < lots; index++) {
             //Generate individual lots and add them to place holder array
             Lots p = new Lots(index);
             //Add place holder array to overall lotList
             lotList.add(index, p);
+        }
+        // Fill in lotList with known lots of interest
+        float[] knownLotsX;                 float[] knownLotsY;
+        knownLotsX = new float[lots];       knownLotsY = new float[lots];
+        knownLotsX[0] = (float) 37.787903;  knownLotsX[0] = (float) -122.407453;
+        knownLotsX[1] = (float) 37.790026;  knownLotsX[1] = (float) -122.406320;
+        knownLotsX[2] = (float) 37.783766;  knownLotsX[2] = (float) -122.407614;
+        knownLotsX[3] = (float) 37.777374;  knownLotsX[3] = (float) -122.418184;
+        knownLotsX[4] = (float) 37.788718;  knownLotsX[4] = (float) -122.395128;
+
+
+        // Generate individual lots and add them to a the beeList
+        for(int index=0; index < bees; index++) {
+            //Generate individual bee agents and add them to place holder array
+            Bees holdBee = new Bees(index);
+
+            //Add place holder array to overall beeList
+            beeList.add(index, holdBee);
+
+            // Initialize Parameters with Random Origin and Destination Coordinates
+            Random randGen = new Random(index);
+            int randDest = randGen.nextInt(lots);
+            beeList.get(index).beeDestX = knownLotsX[randDest];
+            beeList.get(index).beeDestY = knownLotsY[randDest];
+
+            float randOriginX;
+            float randOriginY;
+
+            //Initialize random origin with San Francisco GPS Geo-fence in mind
+            randOriginX = (float) (  37.76 + randGen.nextFloat()*4/10);
+            randOriginY = (float) (-122.39 + randGen.nextFloat()*4/10);
+            beeList.get(index).beeOriginX = randOriginX;
+            beeList.get(index).beeOriginY = randOriginY;
         }
 
         // Display the current state of the environment
@@ -53,7 +78,7 @@ public class Environment {
             System.out.print("Lot# " + lotList.get(index).lotID);
             System.out.print(", Total Spots " + lotList.get(index).lotSpots);
             System.out.print(", Empty Spots " + lotList.get(index).lotEmpty);
-            System.out.print(", Location " + lotList.get(index).lotLocation);
+            System.out.print(", Location " + lotList.get(index).lotLocX + ", " + lotList.get(index).lotLocY);
             System.out.println(", Quality " + lotList.get(index).lotQuality);
         }
 /*
@@ -117,6 +142,7 @@ public class Environment {
                         gausNum = randGen.nextGaussian()/2 + 1;
                     } while ((gausNum < 0) && (gausNum > 1.8));
 
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////////
                     // Move agent towards destination (increment location if the destination is ahead, decrement if it is behind)
                     if (beeList.get(index).beeLocation < beeList.get(index).beeDestination) {
                         beeList.get(index).beeLocation = beeList.get(index).beeLocation + gausNum;
@@ -124,7 +150,7 @@ public class Environment {
                     else {
                         beeList.get(index).beeLocation = beeList.get(index).beeLocation - gausNum;
                     }
-
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////
 
                     // If an agent reaches their destination (gets within 2 units)
                     if ((Math.abs(beeList.get(index).beeLocation - beeList.get(index).beeDestination)) < 2) {
@@ -149,7 +175,8 @@ public class Environment {
                                 randLot = randGen.nextInt(lots);
                                 // Save the chosen lot and set the lot location as the destination
                                 beeList.get(index).beeLot = randLot;
-                                beeList.get(index).beeDestination = lotList.get(randLot).lotLocation;
+                                beeList.get(index).beeDestX = knownLotsX[randLot];
+                                beeList.get(index).beeDestY = knownLotsY[randLot];
                             }
 
 
@@ -199,7 +226,7 @@ public class Environment {
 
                             }
 
-                                // Initiate the search for parking by setting huntTime to the indicator value of -1
+                            // Initiate the search for parking by setting huntTime to the indicator value of -1
                             if (beeList.get(index).huntTime == 0) {
                                 // Set indicator value for huntTime to show that the agent is hunting
                                 beeList.get(index).huntTime = -1;
@@ -229,7 +256,7 @@ public class Environment {
             System.out.print("Lot# " + lotList.get(index).lotID);
             System.out.print(", Total Spots " + lotList.get(index).lotSpots);
             System.out.print(", Empty Spots " + lotList.get(index).lotEmpty);
-            System.out.print(", Location " + lotList.get(index).lotLocation);
+            System.out.print(", Location " + lotList.get(index).lotLocX + ", " + lotList.get(index).lotLocY);
             System.out.println(", Quality " + lotList.get(index).lotQuality);
         }
 /*
