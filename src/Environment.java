@@ -24,10 +24,12 @@ public class Environment {
         int lots = 5;
 
         //Select the agent algorithm: 1 is Random, 2 is Greedy, 3 is HoneyPark MK1
-        int algo = 1;
+        int algo = 2;
 
         // Keep track of total parking events
         int parkingEvents = 0;
+        // Variable for rolling average metric
+        double parktimeAve = 0;
 
         //Create an ArrayList object to hold the Vehicles and the Parking Lots
         ArrayList<Bees> beeList = new ArrayList<Bees>();
@@ -217,6 +219,9 @@ public class Environment {
                     // Add the empty spot back into the parking lot
                     ++lotList.get(beeList.get(index).beeLot).lotEmpty;
                     ++parkingEvents;
+
+                    // Update average park
+                    parktimeAve = (parktimeAve*(parkingEvents - 1) + (beeList.get(index).exitTime - beeList.get(index).startTime))/parkingEvents;
                 }
 
             }
@@ -274,6 +279,7 @@ public class Environment {
         System.out.print(", Total Time Spent = " + totalTime);
         System.out.print(", Total Spent Parking = " + huntTime);
         System.out.print(", Total Parking Events = " + parkingEvents);
+        System.out.print(", Average Parking Time = " + parktimeAve);
         System.out.println(", Maximum Hunt Time = " + maxhuntTime);
     }
 }
