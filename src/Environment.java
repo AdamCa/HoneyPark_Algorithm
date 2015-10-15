@@ -31,9 +31,12 @@ public class Environment {
         // Variable for rolling average metric
         double parktimeAve = 0;
 
-        //Create an ArrayList object to hold the Vehicles and the Parking Lots
+        // Create an ArrayList object to hold the Vehicles and the Parking Lots
         ArrayList<Bees> beeList = new ArrayList<Bees>();
         ArrayList<Lots> lotList = new ArrayList<Lots>();
+
+        // Create a place holder matrix to track parking lot quality
+        double qualityMat[][] = new double [lots][bees];
 
         for(int index=0; index < bees; index++) {
             //Generate individual bee agents and add them to place holder array
@@ -196,9 +199,22 @@ public class Environment {
                                 }
                             }
 
-                            // Choose lot with highest quality given current location (HoneyPark)
+                            // Randomly choose lot proportional to lot quality given current location (HoneyPark)
                             if (algo == 3) {
 
+                                // Update quality of each parking lot for each agent with qualityList array
+                                // Initialize calculation variables
+                                double qualPrev;
+                                double qualCalc;
+
+                                // Calculate lotQuality given time from dest to current parking event
+                                for (int qualdex = 0; qualdex < lots; qualdex++) {
+                                    // Quality Calc Part 1: Get current global lot quality add reduced past quality
+                                    qualCalc = lotList.get(qualdex).lotQuality + Math.pow(qualityMat[qualdex][index],2);
+
+                                    // Quality Calc Part 2: Subtract from quality according to distance to lot (100 dist is max, and max quality is 1)
+                                    qualCalc -= Math.pow(Math.abs(beeList.get(index).beeLocation - lotList.get(qualdex).lotLocation)/100,2);
+                                }
                             }
 
                                 // Initiate the search for parking by setting huntTime to the indicator value of -1
@@ -219,6 +235,11 @@ public class Environment {
                     // Add the empty spot back into the parking lot
                     ++lotList.get(beeList.get(index).beeLot).lotEmpty;
                     ++parkingEvents;
+
+                    // Update lot quality with a positive modifier due to the now known free spot
+                    lotList.get(beeList.get(index).beeLot).lotQuality += .1;
+                    // Update lot quality with the time it took this Bee to park successfully
+                    lotList.get(beeList.get(index).beeLot).lotQuality += 1 - (beeList.get(index).exitTime - beeList.get(index).startTime)/100;
 
                     // Update average park
                     parktimeAve = (parktimeAve*(parkingEvents - 1) + (beeList.get(index).exitTime - beeList.get(index).startTime))/parkingEvents;

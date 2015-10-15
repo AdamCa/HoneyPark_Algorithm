@@ -36,6 +36,6 @@ public class Lots {
         this.lotLocation = lotAddress;
         this.lotSpots = lotSpot;
         this.lotEmpty = randGen.nextInt(lotSpot);
-        this.lotQuality = 1;
+        this.lotQuality = 0;
     }
 }
