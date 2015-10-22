@@ -204,17 +204,31 @@ public class Environment {
 
                                 // Update quality of each parking lot for each agent with qualityList array
                                 // Initialize calculation variables
-                                double qualPrev;
-                                double qualCalc;
+                                double qualPrev = 0;
+                                double qualCalc = 0;
 
-                                // Calculate lotQuality given time from dest to current parking event
+                                // Calculate lot Quality for the current agents
                                 for (int qualdex = 0; qualdex < lots; qualdex++) {
-                                    // Quality Calc Part 1: Get current global lot quality add reduced past quality
+                                    // Bee Quality Calc Part 1: Get current lot quality and add reduced past quality (positive reinforcement from "memory")
                                     qualCalc = lotList.get(qualdex).lotQuality + Math.pow(qualityMat[qualdex][index],2);
-
-                                    // Quality Calc Part 2: Subtract from quality according to distance to lot (100 dist is max, and max quality is 1)
+                                    // Bee Quality Calc Part 2: Subtract from quality according to distance to lot (Negative Reinforcement 100 dist is max, and max impact is .33)
                                     qualCalc -= Math.pow(Math.abs(beeList.get(index).beeLocation - lotList.get(qualdex).lotLocation)/100,2);
+
+                                    // Check for saturation (Quality must be between 0 and 1)
+                                    if (qualCalc > 1) {
+                                        qualCalc = 1;
+                                    } else if (qualCalc < 0) {
+                                        qualCalc = 0;
+                                    }
+
+                                    // Update the quality Matrix with new calculated bee quality
+                                    qualityMat[qualdex][index] = qualCalc;
+
                                 }
+
+                                // Randomly select from available lots given individual bee quality
+
+
                             }
 
                                 // Initiate the search for parking by setting huntTime to the indicator value of -1
